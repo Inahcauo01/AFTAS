@@ -8,6 +8,7 @@ public class MemberDtoMapper {
     public static MemberDto toDto(Member member){
         return MemberDto.builder()
                 .id(member.getId())
+                .num(member.getNum())
                 .name(member.getName())
                 .familyName(member.getFamilyName())
                 .accessionDate(member.getAccessionDate())
@@ -22,6 +23,7 @@ public class MemberDtoMapper {
 
         return Member.builder()
                 .id(memberDto.getId())
+                .num(memberDto.getNum())
                 .name(memberDto.getName())
                 .familyName(memberDto.getFamilyName())
                 .accessionDate(memberDto.getAccessionDate())

@@ -31,7 +31,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<Response<MemberDto>> addMember(@Valid @RequestBody MemberDto memberDto){
+    public ResponseEntity<Response<MemberDto>> create(@Valid @RequestBody MemberDto memberDto){
         Response<MemberDto> response = new Response<>();
         Member member = MemberDtoMapper.toEntity(memberDto);
         try {
@@ -40,6 +40,21 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (ValidationException e) {
             response.setMessage("Member has not been added");
+            response.setErrors(List.of(e.getCustomError()));
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Response<MemberDto>> update(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto){
+        Response<MemberDto> response = new Response<>();
+        Member member = MemberDtoMapper.toEntity(memberDto);
+        try {
+            response.setResult(MemberDtoMapper.toDto(memberService.update(member)));
+            response.setMessage("Member has been updated successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (ValidationException e) {
+            response.setMessage("Member has not been updated");
             response.setErrors(List.of(e.getCustomError()));
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

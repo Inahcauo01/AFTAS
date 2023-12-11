@@ -3,6 +3,8 @@ package com.example.aftas.service.impl;
 import com.example.aftas.domain.Member;
 import com.example.aftas.repository.MemberRespository;
 import com.example.aftas.service.MemberService;
+import com.example.aftas.utils.CustomError;
+import com.example.aftas.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,31 +24,35 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<Member> getMemberById(Long id) {
-        return memberRespository.findById(id);
+    public Optional<Member> getMemberByNum(Integer num) {
+        return memberRespository.findByNum(num);
     }
 
     @Override
-    public Member save(Member member) {
+    public Member save(Member member) throws ValidationException {
+        Optional<Member> optionalLocationName = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
+        if(optionalLocationName.isPresent())
+            throw new ValidationException(new CustomError("identityDocument","identityDocument is already exists"));
         return memberRespository.save(member);
     }
 
+
     @Override
     public Member update(Member member) {
-        if (!isMemberExist(member.getId()))
+        if (isMemberNotExist(member.getId()))
             throw new RuntimeException("Member with id " + member.getId() + " not found");
         return memberRespository.save(member);
     }
 
     @Override
     public void deleteMember(Long id) {
-        if (!isMemberExist(id))
+        if (isMemberNotExist(id))
             throw new RuntimeException("Member with id " + id + " not found");
         memberRespository.deleteById(id);
     }
 
-    private boolean isMemberExist(Long id) {
-        return memberRespository.existsById(id);
+    private boolean isMemberNotExist(Long id) {
+        return !memberRespository.existsById(id);
     }
 
 }

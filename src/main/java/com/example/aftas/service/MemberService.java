@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public interface MemberService {
     public List<Member> getAllMembers();
-    public Optional<Member> getMemberById(Long id);
+    public Optional<Member> getMemberByNum(Integer num);
     public Member save(Member member) throws ValidationException;
     public Member update(Member member) throws ValidationException;
     public void deleteMember(Long id);
