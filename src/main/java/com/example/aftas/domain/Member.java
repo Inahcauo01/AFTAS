@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"identityDocument", "identityNumber"})})
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
