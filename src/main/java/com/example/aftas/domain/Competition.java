@@ -26,7 +26,7 @@ public class Competition {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private int numberOfParticipants;
+    private Integer numberOfParticipants;
     private String location;
-    private double amount;
+    private Double amount;
 }

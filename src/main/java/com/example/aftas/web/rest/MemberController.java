@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -45,6 +46,14 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<MemberDto>> getMemberById(@PathVariable Long id) throws ValidationException {
+        Response<MemberDto> response = new Response<>();
+        Optional<Member> member = memberService.getMemberById(id);
+        response.setResult(MemberDtoMapper.toDto(member.get()));
+        return ResponseEntity.ok().body(response);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Response<MemberDto>> update(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto){
         Response<MemberDto> response = new Response<>();
@@ -58,6 +67,14 @@ public class MemberController {
             response.setErrors(List.of(e.getCustomError()));
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response<MemberDto>> delete(@PathVariable Long id){
+        Response<MemberDto> response = new Response<>();
+        memberService.delete(id);
+        response.setMessage("Member has been deleted successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

@@ -41,5 +41,6 @@ public class MemberDto {
     private String identityDocument;
 
     @NotBlank(message = "Identity number is required")
+    @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "Identity number must have letters and numbers and length must be between 5 and 20 characters")
     private String identityNumber;
 }

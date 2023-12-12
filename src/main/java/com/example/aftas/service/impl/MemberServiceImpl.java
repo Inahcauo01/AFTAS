@@ -29,6 +29,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<Member> getMemberById(Long id) throws ValidationException {
+        if (isMemberNotExist(id))
+            throw new ValidationException(new CustomError("ID","member with id " + id + " not found"));
+        return memberRespository.findById(id);
+    }
+
+    @Override
     public Member save(Member member) throws ValidationException {
         Optional<Member> optionalLocationName = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
         if(optionalLocationName.isPresent())
@@ -45,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(Long id) {
+    public void delete(Long id) {
         if (isMemberNotExist(id))
             throw new RuntimeException("Member with id " + id + " not found");
         memberRespository.deleteById(id);
