@@ -4,6 +4,7 @@ import com.example.aftas.domain.Member;
 import com.example.aftas.dto.MemberDto;
 import com.example.aftas.mapper.MemberDtoMapper;
 import com.example.aftas.service.MemberService;
+import com.example.aftas.utils.CustomError;
 import com.example.aftas.utils.Response;
 import com.example.aftas.utils.ValidationException;
 import jakarta.validation.Valid;
@@ -77,5 +78,17 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    @PostMapping("/search")
+    public ResponseEntity<Response<List<Member>>> findByMembershipNumberOrNameOrFamilyName(@RequestBody @Valid String searchTerm) throws ValidationException {
+        List<Member> members = memberService.findByMembershipNumberOrNameOrFamilyName(searchTerm);
+        Response<List<Member>> response;
+        if (members.isEmpty()) {
+            response = Response.<List<Member>>builder().message("No member found").errors(List.of(new CustomError("searchTerm", "No member found"))).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        response = Response.<List<Member>>builder().message("Members found").result(members).errors(null).build();
+        return ResponseEntity.ok(response);
+    }
 
 }

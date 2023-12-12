@@ -17,7 +17,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRespository memberRespository;
 
-
     @Override
     public List<Member> getAllMembers() {
         return memberRespository.findAll();
@@ -36,9 +35,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Member> findByMembershipNumberOrNameOrFamilyName(String searchTerm) throws ValidationException {
+        List<Member> members = memberRespository.findByNumOrNameOrFamilyName(searchTerm);
+        if(members == null)
+            throw new ValidationException(new CustomError("searchTerm","No member found"));
+        return members;
+    }
+
+    @Override
     public Member save(Member member) throws ValidationException {
-        Optional<Member> optionalLocationName = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
-        if(optionalLocationName.isPresent())
+        Optional<Member> membre = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
+        if(membre.isPresent())
             throw new ValidationException(new CustomError("identityDocument","identityDocument is already exists"));
         return memberRespository.save(member);
     }
