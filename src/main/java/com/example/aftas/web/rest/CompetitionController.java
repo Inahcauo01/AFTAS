@@ -48,22 +48,22 @@ public class CompetitionController {
         }
     }
 
-@PostMapping("/{competitionId}/members/{memberId}")
-public ResponseEntity<Response<RankingDto>> addMemberToCompetition(@PathVariable Long competitionId, @PathVariable Long memberId) {
-    Response<RankingDto> response = new Response<>();
-    try {
-        Ranking createdRanking = competitionService.addMemberToCompetition(memberId, competitionId);
-        RankingDto createdRankingDto = RankingDtoMapper.toDto(createdRanking);
+    @PostMapping("/{competitionId}/members/{memberId}")
+    public ResponseEntity<Response<RankingDto>> addMemberToCompetition(@PathVariable Long competitionId, @PathVariable Long memberId) {
+        Response<RankingDto> response = new Response<>();
+        try {
+            Ranking createdRanking = competitionService.addMemberToCompetition(memberId, competitionId);
+            RankingDto createdRankingDto = RankingDtoMapper.toDto(createdRanking);
 
-        response.setResult(createdRankingDto);
-        response.setMessage("Member has been added to the competition successfully");
-        return ResponseEntity.ok(response);
-    } catch (ValidationException e) {
-        response.setMessage("Member has not been added to the competition");
-        response.setErrors(List.of(e.getCustomError()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            response.setResult(createdRankingDto);
+            response.setMessage("Member has been added to the competition successfully");
+            return ResponseEntity.ok(response);
+        } catch (ValidationException e) {
+            response.setMessage("Member has not been added to the competition");
+            response.setErrors(List.of(e.getCustomError()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
-}
 
 
 }

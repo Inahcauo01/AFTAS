@@ -19,6 +19,6 @@ public class Fish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Double AverageWeight;
+    private Double averageWeight;
 
 }
