@@ -52,16 +52,16 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Member update(Member member) {
+    public Member update(Member member) throws ValidationException{
         if (isMemberNotExist(member.getId()))
-            throw new RuntimeException("Member with id " + member.getId() + " not found");
+            throw new ValidationException(new CustomError("ID","member with id " + member.getId() + " not found"));
         return memberRespository.save(member);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ValidationException{
         if (isMemberNotExist(id))
-            throw new RuntimeException("Member with id " + id + " not found");
+            throw new ValidationException(new CustomError("ID","member with id " + id + " not found"));
         memberRespository.deleteById(id);
     }
 

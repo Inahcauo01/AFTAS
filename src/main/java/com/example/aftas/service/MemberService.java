@@ -13,7 +13,7 @@ public interface MemberService {
     public Optional<Member> getMemberByNum(Integer num);
     public Member save(Member member) throws ValidationException;
     public Member update(Member member) throws ValidationException;
-    public void delete(Long id);
+    public void delete(Long id) throws ValidationException;
     public Optional<Member> getMemberById(Long id) throws ValidationException;
 
     public List<Member> findByMembershipNumberOrNameOrFamilyName(String searchTerm) throws ValidationException;

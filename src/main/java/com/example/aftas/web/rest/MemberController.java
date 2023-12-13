@@ -71,7 +71,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<MemberDto>> delete(@PathVariable Long id){
+    public ResponseEntity<Response<MemberDto>> delete(@PathVariable Long id) throws ValidationException {
         Response<MemberDto> response = new Response<>();
         memberService.delete(id);
         response.setMessage("Member has been deleted successfully");

@@ -1,10 +1,11 @@
 package com.example.aftas.web.rest;
 
 import com.example.aftas.domain.Competition;
+import com.example.aftas.domain.Ranking;
 import com.example.aftas.dto.CompetitionDto;
-import com.example.aftas.dto.MemberDto;
+import com.example.aftas.dto.RankingDto;
 import com.example.aftas.mapper.CompetitionDtoMapper;
-import com.example.aftas.mapper.MemberDtoMapper;
+import com.example.aftas.mapper.RankingDtoMapper;
 import com.example.aftas.service.CompetitionService;
 import com.example.aftas.utils.Response;
 import com.example.aftas.utils.ValidationException;
@@ -46,4 +47,23 @@ public class CompetitionController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+@PostMapping("/{competitionId}/members/{memberId}")
+public ResponseEntity<Response<RankingDto>> addMemberToCompetition(@PathVariable Long competitionId, @PathVariable Long memberId) {
+    Response<RankingDto> response = new Response<>();
+    try {
+        Ranking createdRanking = competitionService.addMemberToCompetition(memberId, competitionId);
+        RankingDto createdRankingDto = RankingDtoMapper.toDto(createdRanking);
+
+        response.setResult(createdRankingDto);
+        response.setMessage("Member has been added to the competition successfully");
+        return ResponseEntity.ok(response);
+    } catch (ValidationException e) {
+        response.setMessage("Member has not been added to the competition");
+        response.setErrors(List.of(e.getCustomError()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+}
+
+
 }

@@ -2,7 +2,10 @@ package com.example.aftas.service.impl;
 
 import com.example.aftas.domain.Competition;
 import com.example.aftas.domain.Member;
+import com.example.aftas.domain.Ranking;
 import com.example.aftas.repository.CompetitionRepository;
+import com.example.aftas.repository.MemberRespository;
+import com.example.aftas.repository.RankingRepository;
 import com.example.aftas.service.CompetitionService;
 import com.example.aftas.utils.CustomError;
 import com.example.aftas.utils.ValidationException;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class CompetitionServiceImpl implements CompetitionService {
 
     private final CompetitionRepository competitionRepository;
+    private final MemberRespository memberRepository;
+    private final RankingRepository rankingRepository;
 
     @Override
     public List<Competition> getAllCompetitions() {
@@ -30,6 +35,53 @@ public class CompetitionServiceImpl implements CompetitionService {
         competition.setCode(competition.getLocation().substring(0, 3).toLowerCase() + "-" + competition.getDate().format(DateTimeFormatter.ofPattern("yy-MM-dd")));
         validateCompetition(competition);
         return competitionRepository.save(competition);
+    }
+
+
+
+//    public void addMemberToCompetition(Long memberId, Long competitionId) throws ValidationException {
+//        Optional<Member> memberOptional = memberRepository.findById(memberId);
+//        Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
+//
+//        if (memberOptional.isPresent() && competitionOptional.isPresent()) {
+//            Member member = memberOptional.get();
+//            Competition competition = competitionOptional.get();
+//
+//            validateAddMemberToCompetition(member, competition);
+//
+//            Ranking ranking = Ranking.builder()
+//                    .member(member)
+//                    .competition(competition)
+//                    .build();
+//            rankingRepository.save(ranking);
+//        } else {
+//            throw new ValidationException(new CustomError("member or competition", "member or competition not found"));
+//        }
+//    }
+public Ranking addMemberToCompetition(Long memberId, Long competitionId) throws ValidationException {
+    Optional<Member> memberOptional = memberRepository.findById(memberId);
+    Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
+
+    if (memberOptional.isPresent() && competitionOptional.isPresent()) {
+        Member member = memberOptional.get();
+        Competition competition = competitionOptional.get();
+
+        validateAddMemberToCompetition(member, competition);
+
+        Ranking ranking = Ranking.builder()
+                .member(member)
+                .competition(competition)
+                .build();
+        return rankingRepository.save(ranking);
+    } else {
+        throw new ValidationException(new CustomError("member or competition", "member or competition not found"));
+    }
+}
+
+    private void validateAddMemberToCompetition(Member member, Competition competition) throws ValidationException {
+        // check if member is already exists in the competition
+        if (!rankingRepository.findByMemberAndCompetition(member, competition).isEmpty())
+            throw new ValidationException(new CustomError("member", "Member is already exists in the competition"));
     }
 
 
