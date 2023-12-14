@@ -18,7 +18,16 @@ public class Hunting {
 
     private int numberOfFish;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "competition_id")
     private Competition competition;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "fish_id")
+    private Fish fish;
+
 }

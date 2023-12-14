@@ -1,6 +1,7 @@
 package com.example.aftas.mapper;
 
 import com.example.aftas.domain.Fish;
+import com.example.aftas.domain.Level;
 import com.example.aftas.dto.FishDto;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ public class FishDtoMapper {
                 .id(fish.getId())
                 .name(fish.getName())
                 .averageWeight(fish.getAverageWeight())
+                .levelCode(fish.getLevel().getCode())
                 .build();
     }
 
@@ -23,6 +25,7 @@ public class FishDtoMapper {
                 .id(fishDto.getId())
                 .name(fishDto.getName())
                 .averageWeight(fishDto.getAverageWeight())
+                .level(Level.builder().code(fishDto.getLevelCode()).build())
                 .build();
     }
 }

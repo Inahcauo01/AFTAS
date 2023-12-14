@@ -24,4 +24,7 @@ public class FishDto {
     @Min(value = 0, message = "Average weight must be a positive number")
     private Double averageWeight;
 
+    @NotNull(message = "Level code is required")
+    @Min(value = 1, message = "Level code must be a positive number")
+    private Long levelCode;
 }

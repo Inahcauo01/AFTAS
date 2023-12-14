@@ -22,23 +22,18 @@ public class FishController {
     private final FishService fishService;
     private final FishSeeder fishSeeder;
 
-//    @GetMapping("/seed")
-//    public void seed() throws ValidationException {
-//        fishSeeder.seedFish();
-//    }
-
     @GetMapping("/seed")
     public ResponseEntity<Response<List<FishDto>>> seed() throws ValidationException {
         fishSeeder.seedFish();
 
-        // Assuming you want to return the list of fish after seeding
         List<FishDto> seededFishList = fishService.findAll()
                 .stream()
                 .map(FishDtoMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
 
         Response<List<FishDto>> response = new Response<>();
         response.setResult(seededFishList);
+        response.setMessage("Fish seeded successfully");
         return ResponseEntity.ok().body(response);
     }
 
@@ -49,8 +44,13 @@ public class FishController {
         List<FishDto> fishList = fishService.findAll()
                 .stream()
                 .map(FishDtoMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
         response.setResult(fishList);
+        if (fishList.isEmpty()) {
+            response.setMessage("There is no fish in the database");
+        } else {
+            response.setMessage("Fish list retrieved successfully");
+        }
         return ResponseEntity.ok().body(response);
     }
 

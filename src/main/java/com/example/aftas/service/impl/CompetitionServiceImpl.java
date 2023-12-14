@@ -38,45 +38,25 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
 
+    public Ranking addMemberToCompetition(Long memberId, Long competitionId) throws ValidationException {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
 
-//    public void addMemberToCompetition(Long memberId, Long competitionId) throws ValidationException {
-//        Optional<Member> memberOptional = memberRepository.findById(memberId);
-//        Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
-//
-//        if (memberOptional.isPresent() && competitionOptional.isPresent()) {
-//            Member member = memberOptional.get();
-//            Competition competition = competitionOptional.get();
-//
-//            validateAddMemberToCompetition(member, competition);
-//
-//            Ranking ranking = Ranking.builder()
-//                    .member(member)
-//                    .competition(competition)
-//                    .build();
-//            rankingRepository.save(ranking);
-//        } else {
-//            throw new ValidationException(new CustomError("member or competition", "member or competition not found"));
-//        }
-//    }
-public Ranking addMemberToCompetition(Long memberId, Long competitionId) throws ValidationException {
-    Optional<Member> memberOptional = memberRepository.findById(memberId);
-    Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
+        if (memberOptional.isPresent() && competitionOptional.isPresent()) {
+            Member member = memberOptional.get();
+            Competition competition = competitionOptional.get();
 
-    if (memberOptional.isPresent() && competitionOptional.isPresent()) {
-        Member member = memberOptional.get();
-        Competition competition = competitionOptional.get();
+            validateAddMemberToCompetition(member, competition);
 
-        validateAddMemberToCompetition(member, competition);
-
-        Ranking ranking = Ranking.builder()
-                .member(member)
-                .competition(competition)
-                .build();
-        return rankingRepository.save(ranking);
-    } else {
-        throw new ValidationException(new CustomError("member or competition", "member or competition not found"));
+            Ranking ranking = Ranking.builder()
+                    .member(member)
+                    .competition(competition)
+                    .build();
+            return rankingRepository.save(ranking);
+        } else {
+            throw new ValidationException(new CustomError("member or competition", "member or competition not found"));
+        }
     }
-}
 
     private void validateAddMemberToCompetition(Member member, Competition competition) throws ValidationException {
         // check if member is already exists in the competition
