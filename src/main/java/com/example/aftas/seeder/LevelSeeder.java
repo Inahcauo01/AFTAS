@@ -17,7 +17,7 @@ public class LevelSeeder {
 
     public void seedLevels() throws ValidationException {
         List<Level> levelList = Arrays.asList(
-                Level.builder().description("Débutant").points(0).build(),
+                Level.builder().description("Débutant").points(50).build(),
                 Level.builder().description("Amateur").points(100).build(),
                 Level.builder().description("Confirmé").points(200).build(),
                 Level.builder().description("Expert").points(300).build(),

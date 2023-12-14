@@ -32,87 +32,56 @@ public class HuntingServiceImpl implements HuntingService {
     @Override
     public Hunting save(Hunting hunting) throws ValidationException {
         validateHunting(hunting);
+        Hunting savedHunting;
 
         if (huntingRepository.existsByMemberAndCompetitionAndFish(hunting.getMember(), hunting.getCompetition(), hunting.getFish())) {
             Hunting hunting1 = huntingRepository.findByMemberAndCompetitionAndFish(hunting.getMember(), hunting.getCompetition(), hunting.getFish());
             hunting1.setNumberOfFish(hunting1.getNumberOfFish() + 1);
-            return huntingRepository.save(hunting1);
+            savedHunting = huntingRepository.save(hunting1);
+        }else {
+            savedHunting = huntingRepository.save(hunting);
         }
 
-        return huntingRepository.save(hunting);
+        Optional<Ranking> rankingOptional = rankingService.getRankingByMemberAndCompetition(hunting.getMember(), hunting.getCompetition());
+        Integer points = hunting.getFish().getLevel().getPoints();
+
+        if (rankingOptional.isPresent()) {
+            Ranking ranking = rankingOptional.get();
+            ranking.setScore(ranking.getScore() + points);
+            rankingService.update(ranking);
+        } else {
+            rankingService.save(
+                    Ranking.builder()
+                    .member(hunting.getMember())
+                    .competition(hunting.getCompetition())
+                    .score(points)
+                    .build()
+            );
+        }
+        return savedHunting;
     }
 
-    //    private void validateHunting(Hunting hunting) throws ValidationException {
-//        Optional<Competition> optionalCompetition = competitionService.findByCode(hunting.getCompetition().getCode());
-//        Optional<Member> optionalMember = memberService.findByNum(hunting.getMember().getNum());
-//        List<Ranking> rankins = rankingService.getRankingByMemberAndCompetition(optionalMember.get(), optionalCompetition.get());
-//
-//        // check if member exists
-//        if (!memberService.existsByNumber(hunting.getMember().getNum())) {
-//            throw new ValidationException(new CustomError("member", "member not found"));
-//        }
-//
-//        // check if competition exists
-//        if (!competitionService.existsByCode(hunting.getCompetition().getCode())) {
-//            throw new ValidationException(new CustomError("competition", "competition not found"));
-//        }
-//
-//        // check if competition date is not before 24 hours from now
-//        if (optionalCompetition.isEmpty()) {
-//            throw new ValidationException(new CustomError("competition code", "Invalid competition code"));
-//        }
-//
-//        // Get the current date and time
-//        LocalDateTime now = LocalDateTime.now();
-//
-//        // Check if the competition date is before 24 hours from now
-//        if (optionalCompetition.get().getDate().isBefore(ChronoLocalDate.from(now.minusHours(24)))) {
-//            throw new ValidationException(new CustomError("competition date", "Competition date must be at least 24 hours from now"));
-//        }
-//
-//        // Check if the competition date is after 24 hours from now
-////        if (competition.getDate().isAfter(ChronoLocalDate.from(now.plusHours(24)))) {
-////            throw new ValidationException(new CustomError("competition date", "Competition date must be within the next 24 hours of competition start time"));
-////        }
-//
-//        // check if competition is not full
-//
-//        if (rankins.size() >= optionalCompetition.get().getNumberOfParticipants()) {
-//            throw new ValidationException(new CustomError("competition", "competition is full"));
-//        }
-//
-//        // check the fish name is not in the names of fish in the table fish
-//        List<String> validFishNames = fishService.findAllFishNames();
-//        if (!validFishNames.contains(hunting.getFish().getName())) {
-//            throw new ValidationException(new CustomError("fish", "fish name is not valid"));
-//        }
-//
-//        // check if member is registered in the competition
-//        if(rankins.isEmpty()) {
-//            throw new ValidationException(new CustomError("member", "member is not registered in the competition"));
-//        }
-//    }
     private void validateHunting(Hunting hunting) throws ValidationException {
         Optional<Competition> optionalCompetition = competitionService.findByCode(hunting.getCompetition().getCode());
         Optional<Member> optionalMember = memberService.findByNum(hunting.getMember().getNum());
         Optional<Fish> optionalFish = fishService.findByName(hunting.getFish().getName());
         LocalDateTime now = LocalDateTime.now();
 
-        if (optionalMember.isEmpty()) {
+        if (optionalMember.isEmpty())
             throw new ValidationException(new CustomError("member", "member not found"));
-        }
+
         Member member = optionalMember.get();
 
 
-        if (optionalCompetition.isEmpty()) {
+        if (optionalCompetition.isEmpty())
             throw new ValidationException(new CustomError("competition", "Invalid competition code"));
-        }
+
         Competition competition = optionalCompetition.get();
 
 
-        if (optionalFish.isEmpty()) {
+        if (optionalFish.isEmpty())
             throw new ValidationException(new CustomError("fish", "Invalid fish name"));
-        }
+
         Fish fish = optionalFish.get();
 
 
@@ -121,27 +90,25 @@ public class HuntingServiceImpl implements HuntingService {
         hunting.setFish(fish);
 
         // Check if the competition date is before 24 hours from now
-        if (competition.getDate().isBefore(ChronoLocalDate.from(now.minusHours(24)))) {
+        if (competition.getDate().isBefore(ChronoLocalDate.from(now.minusHours(24))))
             throw new ValidationException(new CustomError("competition date", "Competition date must be at least 24 hours from now"));
-        }
+
 
         // Check if the competition date is after 24 hours from now
-//         if (optionalCompetition.get().getDate().isAfter(ChronoLocalDate.from(now.plusHours(24)))) {
-//             throw new ValidationException(new CustomError("competition date", "Competition date must be within the next 24 hours of competition start time"));
-//         }
+//        if (optionalCompetition.get().getDate().isAfter(ChronoLocalDate.from(now.plusHours(24)))) {
+//            throw new ValidationException(new CustomError("competition date", "Competition date must be within the next 24 hours of competition start time"));
+//        }
 
-        // TODO: fix this
-        // check if competition is not full
+
         Optional<Ranking> rankingOptional = rankingService.getRankingByMemberAndCompetition(member, competition);
 
-        if (rankingOptional.isEmpty()) {
+        if (rankingOptional.isEmpty())
             throw new ValidationException(new CustomError("member", "member is not registered in the competition"));
-        }
+
 
         List<Ranking> rankings = rankingService.getRankingByCompetitionCode(competition.getCode());
-        if (rankings.size() >= competition.getNumberOfParticipants()) {
+        if (rankings.size() >= competition.getNumberOfParticipants())
             throw new ValidationException(new CustomError("competition", "competition is full"));
-        }
 
     }
 

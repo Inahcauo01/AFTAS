@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,6 +29,6 @@ public class Competition {
     private String location;
     private Double amount;
 
-    @OneToMany(mappedBy = "competition")
-    private List<Ranking> rankings;
+//    @OneToMany(mappedBy = "competition")
+//    private List<Ranking> rankings;
 }

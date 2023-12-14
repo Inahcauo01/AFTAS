@@ -23,6 +23,6 @@ public class Level {
     @Column(unique = true)
     private Integer points;
 
-    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL)
-    private List<Fish> fishes;
+//    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL)
+//    private List<Fish> fishes;
 }

@@ -18,6 +18,7 @@ public class Ranking {
 
     @Builder.Default
     private Integer rank = 0;
+    @Builder.Default
     private Integer score = 0;
 
     @ManyToOne
