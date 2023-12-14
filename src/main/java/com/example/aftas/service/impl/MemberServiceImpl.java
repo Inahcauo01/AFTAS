@@ -54,6 +54,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member save(Member member) throws ValidationException {
+        Optional<Member> existingMember = memberRespository.findByNum(member.getNum());
+        if (existingMember.isPresent())
+            throw new ValidationException(new CustomError("num", "Member with this num already exists"));
+
         Optional<Member> membre = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
         if(membre.isPresent())
             throw new ValidationException(new CustomError("identityDocument","identityDocument is already exists"));
