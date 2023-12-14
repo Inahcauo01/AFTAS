@@ -132,20 +132,17 @@ public class HuntingServiceImpl implements HuntingService {
 
         // TODO: fix this
         // check if competition is not full
-//        List<Ranking> rankins = rankingService.getRankingByMemberAndCompetition(member, optionalCompetition.get());
-//        if (rankins.size() >= competition.getNumberOfParticipants()) {
-//            throw new ValidationException(new CustomError("competition", "competition is full"));
-//        }
+        Optional<Ranking> rankingOptional = rankingService.getRankingByMemberAndCompetition(member, competition);
 
-        // Check if hunting or fish is null
-        if (hunting.getFish() == null) {
-            throw new ValidationException(new CustomError("hunting", "Hunting or fish object is null"));
+        if (rankingOptional.isEmpty()) {
+            throw new ValidationException(new CustomError("member", "member is not registered in the competition"));
         }
 
-        // check if member is registered in the competition
-//    if (rankins.isEmpty()) {
-//        throw new ValidationException(new CustomError("member", "member is not registered in the competition"));
-//    }
+        List<Ranking> rankings = rankingService.getRankingByCompetitionCode(competition.getCode());
+        if (rankings.size() >= competition.getNumberOfParticipants()) {
+            throw new ValidationException(new CustomError("competition", "competition is full"));
+        }
+
     }
 
 

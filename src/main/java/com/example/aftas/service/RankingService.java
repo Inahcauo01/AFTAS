@@ -7,6 +7,7 @@ import com.example.aftas.utils.ValidationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface RankingService {
@@ -16,5 +17,5 @@ public interface RankingService {
     public void deleteRankingById(Long id) throws ValidationException;
     public Ranking getRankingById(Long id) throws ValidationException;
     public List<Ranking> getRankingByCompetitionCode(String code) throws ValidationException;
-    public List<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException;
+    public Optional<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException;
 }

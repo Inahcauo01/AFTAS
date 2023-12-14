@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -47,8 +48,8 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public List<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException {
-        return rankingRepository.findByMemberAndCompetition(Member.builder().build(), Competition.builder().build());
+    public Optional<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException {
+        return rankingRepository.findByMemberAndCompetition(member, competition);
     }
 
 }
