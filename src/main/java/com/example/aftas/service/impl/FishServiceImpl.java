@@ -63,4 +63,14 @@ public class FishServiceImpl implements FishService {
         }
         return fishRepository.saveAll(fishList);
     }
+
+    @Override
+    public List<String> findAllFishNames() {
+        return fishRepository.findAllFishNames();
+    }
+
+    @Override
+    public Optional<Fish> findByName(String name) {
+        return fishRepository.findByNameIgnoreCase(name);
+    }
 }

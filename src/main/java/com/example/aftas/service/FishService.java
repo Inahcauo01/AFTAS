@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface FishService {
@@ -17,4 +18,7 @@ public interface FishService {
 
     public List<Fish> saveAll(List<Fish> fishList) throws ValidationException;
 
+    List<String> findAllFishNames();
+
+    Optional<Fish> findByName(String name);
 }

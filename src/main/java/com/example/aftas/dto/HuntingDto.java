@@ -1,5 +1,6 @@
 package com.example.aftas.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class HuntingDto {
 
     @Builder.Default
+    @Min(value = 1, message = "Number of fish must be at least 1")
     private int numberOfFish = 1;
 
     @NotBlank(message = "Competition code is required")
@@ -26,4 +28,5 @@ public class HuntingDto {
 
     @NotBlank(message = "Fish name is required")
     private String fishName;
+
 }

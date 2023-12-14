@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<MemberDto>> update(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto){
+    public ResponseEntity<Response<MemberDto>> update(@Valid @PathVariable Long id, @Valid @RequestBody MemberDto memberDto){
         Response<MemberDto> response = new Response<>();
         Member member = MemberDtoMapper.toEntity(memberDto);
         try {

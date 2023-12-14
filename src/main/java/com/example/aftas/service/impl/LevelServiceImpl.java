@@ -61,6 +61,7 @@ public class LevelServiceImpl implements LevelService {
 
     @Override
     public List<Level> saveAll(List<Level> levelList) throws ValidationException {
+        Level prevLevel = null;
         for (Level level : levelList) {
             Optional<Level> levelOptional = levelRepository.findByDescription(level.getDescription());
             if (levelOptional.isPresent())
@@ -69,6 +70,12 @@ public class LevelServiceImpl implements LevelService {
             levelOptional = levelRepository.findByPoints(level.getPoints());
             if (levelOptional.isPresent())
                 throw new ValidationException(new CustomError("points", "Level with this points already exists"));
+
+            if (prevLevel != null && level.getPoints() < prevLevel.getPoints()) {
+                throw new ValidationException(new CustomError("points", "Level points must be in ascending order"));
+            }
+
+            prevLevel = level;
         }
         return levelRepository.saveAll(levelList);
     }

@@ -98,4 +98,12 @@ public class CompetitionServiceImpl implements CompetitionService {
             throw new ValidationException(new CustomError("competition time", "Competition start time must be at least 4 hours before the end time"));
 
     }
+
+    public boolean existsByCode(String code) {
+        return competitionRepository.existsByCode(code);
+    }
+
+    public Optional<Competition> findByCode(String code) {
+        return competitionRepository.findByCode(code);
+    }
 }

@@ -17,4 +17,8 @@ public interface MemberService {
     public Optional<Member> getMemberById(Long id) throws ValidationException;
 
     public List<Member> findByMembershipNumberOrNameOrFamilyName(String searchTerm) throws ValidationException;
+
+    boolean existsByNumber(Integer num);
+
+    Optional<Member> findByNum(Integer num);
 }

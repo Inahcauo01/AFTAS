@@ -43,6 +43,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public boolean existsByNumber(Integer num) {
+        return memberRespository.existsByNum(num);
+    }
+
+    @Override
+    public Optional<Member> findByNum(Integer num) {
+        return memberRespository.findByNum(num);
+    }
+
+    @Override
     public Member save(Member member) throws ValidationException {
         Optional<Member> membre = memberRespository.findByIdentityNumberAndIdentityDocument(member.getIdentityNumber(), member.getIdentityDocument());
         if(membre.isPresent())

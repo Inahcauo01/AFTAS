@@ -7,12 +7,10 @@ import com.example.aftas.service.LevelService;
 import com.example.aftas.utils.CustomError;
 import com.example.aftas.utils.Response;
 import com.example.aftas.utils.ValidationException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class LevelController {
     }
 
     @PostMapping
-    public ResponseEntity<Response<LevelDto>> save(LevelDto levelDto) throws ValidationException {
+    public ResponseEntity<Response<LevelDto>> save(@Valid @RequestBody LevelDto levelDto) throws ValidationException {
         Response<LevelDto> response = new Response<>();
         response.setResult(LevelDtoMapper.toDto(levelService.save(LevelDtoMapper.toEntity(levelDto))));
         return ResponseEntity.ok().body(response);

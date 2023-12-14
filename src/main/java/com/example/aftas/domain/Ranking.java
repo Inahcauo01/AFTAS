@@ -27,4 +27,5 @@ public class Ranking {
     @ManyToOne
     @JoinColumn(name = "competition_id")
     private Competition competition;
+
 }

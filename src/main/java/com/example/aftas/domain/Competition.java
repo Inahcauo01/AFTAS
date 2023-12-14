@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,4 +27,7 @@ public class Competition {
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
+
+    @OneToMany(mappedBy = "competition")
+    private List<Ranking> rankings;
 }
