@@ -14,4 +14,8 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
     Optional<Ranking> findByMemberAndCompetition(Member member, Competition competition);
 
     List<Ranking> findByCompetition_Code(String code);
+
+
+    List<Ranking> findByCompetition_IdOrderByRankAsc(Long id);
+
 }

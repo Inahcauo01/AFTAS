@@ -17,6 +17,7 @@ public interface RankingService {
     public void deleteRankingById(Long id) throws ValidationException;
     public Ranking getRankingById(Long id) throws ValidationException;
     public List<Ranking> getRankingByCompetitionCode(String code) throws ValidationException;
+    public List<Ranking> getRankingByCompetitionId(Long id) throws ValidationException;
     public Optional<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException;
 
     public void updateRankings(String code);

@@ -5,6 +5,7 @@ import com.example.aftas.domain.Member;
 import com.example.aftas.domain.Ranking;
 import com.example.aftas.repository.RankingRepository;
 import com.example.aftas.service.RankingService;
+import com.example.aftas.utils.CustomError;
 import com.example.aftas.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -35,17 +36,27 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void deleteRankingById(Long id) throws ValidationException {
-
+        if (rankingRepository.existsById(id))
+            rankingRepository.deleteById(id);
+        else
+            throw new ValidationException(new CustomError("id", "Ranking with id " + id + " not found"));
     }
 
     @Override
     public Ranking getRankingById(Long id) throws ValidationException {
-        return null;
+        return rankingRepository.findById(id)
+                .orElseThrow(() -> new ValidationException(new CustomError("id", "Ranking with id " + id + " not found")));
     }
 
     @Override
     public List<Ranking> getRankingByCompetitionCode(String code) throws ValidationException {
         return rankingRepository.findByCompetition_Code(code);
+    }
+
+    @Override
+    public List<Ranking> getRankingByCompetitionId(Long id) throws ValidationException {
+//        return rankingRepository.findByCompetition_Id(id);
+        return rankingRepository.findByCompetition_IdOrderByRankAsc(id);
     }
 
     @Override
