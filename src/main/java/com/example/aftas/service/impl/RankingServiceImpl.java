@@ -9,6 +9,7 @@ import com.example.aftas.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +53,15 @@ public class RankingServiceImpl implements RankingService {
         return rankingRepository.findByMemberAndCompetition(member, competition);
     }
 
+    public void updateRankings(String code) {
+        List<Ranking> rankings = rankingRepository.findByCompetition_Code(code);
+
+        rankings.sort(Comparator.comparing(Ranking::getScore).reversed());
+
+        int rank = 1;
+        for (Ranking ranking : rankings) {
+            ranking.setRank(rank++);
+            rankingRepository.save(ranking);
+        }
+    }
 }

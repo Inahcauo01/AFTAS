@@ -58,6 +58,7 @@ public class HuntingServiceImpl implements HuntingService {
                     .build()
             );
         }
+        rankingService.updateRankings(hunting.getCompetition().getCode());
         return savedHunting;
     }
 

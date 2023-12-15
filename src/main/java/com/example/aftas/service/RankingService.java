@@ -18,4 +18,6 @@ public interface RankingService {
     public Ranking getRankingById(Long id) throws ValidationException;
     public List<Ranking> getRankingByCompetitionCode(String code) throws ValidationException;
     public Optional<Ranking> getRankingByMemberAndCompetition(Member member, Competition competition) throws ValidationException;
+
+    public void updateRankings(String code);
 }
