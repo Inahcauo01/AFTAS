@@ -79,8 +79,8 @@ public class MemberController {
     }
 
 
-    @PostMapping("/search")
-    public ResponseEntity<Response<List<Member>>> findByMembershipNumberOrNameOrFamilyName(@RequestBody @Valid String searchTerm) throws ValidationException {
+    @PostMapping("/search/{searchTerm}")
+    public ResponseEntity<Response<List<Member>>> findByMembershipNumberOrNameOrFamilyName(@PathVariable @Valid String searchTerm) throws ValidationException {
         List<Member> members = memberService.findByMembershipNumberOrNameOrFamilyName(searchTerm);
         Response<List<Member>> response;
         if (members.isEmpty()) {

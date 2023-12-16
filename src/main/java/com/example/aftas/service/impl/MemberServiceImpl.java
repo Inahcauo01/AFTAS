@@ -37,8 +37,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> findByMembershipNumberOrNameOrFamilyName(String searchTerm) throws ValidationException {
         List<Member> members = memberRespository.findByNumOrNameOrFamilyName(searchTerm);
-        if(members == null)
-            throw new ValidationException(new CustomError("searchTerm","No member found"));
+//        List<Member> members = memberRespository.findByNumOrNameOrFamilyName("111");
+//        if(members.isEmpty())
+//            throw new ValidationException(new CustomError("searchTerm","No member found"));
         return members;
     }
 

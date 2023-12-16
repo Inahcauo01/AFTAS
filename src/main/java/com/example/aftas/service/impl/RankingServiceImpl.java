@@ -55,7 +55,6 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public List<Ranking> getRankingByCompetitionId(Long id) throws ValidationException {
-//        return rankingRepository.findByCompetition_Id(id);
         return rankingRepository.findByCompetition_IdOrderByRankAsc(id);
     }
 
