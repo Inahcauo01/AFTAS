@@ -3,6 +3,7 @@ package com.example.aftas.service.impl;
 import com.example.aftas.domain.Competition;
 import com.example.aftas.domain.Member;
 import com.example.aftas.domain.Ranking;
+import com.example.aftas.domain.RankingKey;
 import com.example.aftas.repository.CompetitionRepository;
 import com.example.aftas.repository.MemberRespository;
 import com.example.aftas.repository.RankingRepository;
@@ -32,8 +33,8 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition save(Competition competition) throws ValidationException {
-        if (competition.getLocation() == null)
-            throw new ValidationException(new CustomError("location", "Location must not be null"));
+        if (competition.getLocation() == null || competition.getLocation().isBlank())
+            throw new ValidationException(new CustomError("location", "Location must not be null or black"));
 
         competition.setCode(competition.getLocation().substring(0, 3).toLowerCase() + "-" + competition.getDate().format(DateTimeFormatter.ofPattern("yy-MM-dd")));
         validateCompetition(competition);
@@ -45,6 +46,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         Optional<Member> memberOptional = memberRepository.findById(memberId);
         Optional<Competition> competitionOptional = competitionRepository.findById(competitionId);
 
+
         if (memberOptional.isPresent() && competitionOptional.isPresent()) {
             Member member = memberOptional.get();
             Competition competition = competitionOptional.get();
@@ -52,6 +54,11 @@ public class CompetitionServiceImpl implements CompetitionService {
             validateAddMemberToCompetition(member, competition);
 
             Ranking ranking = Ranking.builder()
+                    .id(RankingKey.builder()
+                            .competition_id(competition.getId())
+                            .member_id(member.getId())
+                            .build()
+                    )
                     .member(member)
                     .competition(competition)
                     .build();
@@ -105,7 +112,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     private void validateCompetition(Competition competition) throws ValidationException {
         // check if location is empty
-        if (competition.getLocation().isEmpty())
+        if (competition.getLocation().isEmpty() || competition.getLocation().isBlank())
             throw new ValidationException(new CustomError("location", "Location is required"));
 
         // check if competition code is already exists

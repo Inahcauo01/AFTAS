@@ -6,10 +6,13 @@ import com.example.aftas.service.MemberService;
 import com.example.aftas.utils.CustomError;
 import com.example.aftas.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Component
 @RequiredArgsConstructor
@@ -51,6 +54,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Optional<Member> findByNum(Integer num) {
         return memberRespository.findByNum(num);
+    }
+
+    @Override
+    public List<Member> getAllMembers(Integer pageNo, Integer pageSize) {
+        return memberRespository.findAll(of(pageNo, pageSize)).stream().toList();
     }
 
     @Override

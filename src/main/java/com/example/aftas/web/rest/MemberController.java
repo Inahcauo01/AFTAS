@@ -32,6 +32,16 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/paginate")
+    public ResponseEntity<Response<List<MemberDto>>> getAllMembersPaginate(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                           @RequestParam(defaultValue = "10") Integer pageSize){
+        Response<List<MemberDto>> response = new Response<>();
+        List<MemberDto> memberList = new ArrayList<>();
+        memberService.getAllMembers(pageNo, pageSize).stream().map(MemberDtoMapper::toDto).forEach(memberList::add);
+        response.setResult(memberList);
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping
     public ResponseEntity<Response<MemberDto>> create(@Valid @RequestBody MemberDto memberDto){
         Response<MemberDto> response = new Response<>();

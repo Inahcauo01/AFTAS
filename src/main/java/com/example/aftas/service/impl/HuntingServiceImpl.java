@@ -9,7 +9,9 @@ import com.example.aftas.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -117,6 +119,10 @@ public class HuntingServiceImpl implements HuntingService {
         if (rankings.size() >= competition.getNumberOfParticipants())
             throw new ValidationException(new CustomError("competition", "competition is full"));
 
+
+        // Check if the competition is already started
+        if (competition.getDate().isAfter(LocalDate.now())  && competition.getStartTime().isAfter(LocalTime.now()))
+            throw new ValidationException(new CustomError("competition", "Competition is not started yet"));
     }
 
 
