@@ -89,7 +89,7 @@ public class MemberController {
     }
 
 
-    @PostMapping("/search/{searchTerm}")
+    @GetMapping("/search/{searchTerm}")
     public ResponseEntity<Response<List<Member>>> findByMembershipNumberOrNameOrFamilyName(@PathVariable @Valid String searchTerm) throws ValidationException {
         List<Member> members = memberService.findByMembershipNumberOrNameOrFamilyName(searchTerm);
         Response<List<Member>> response;
