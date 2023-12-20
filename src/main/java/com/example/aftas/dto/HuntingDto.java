@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class HuntingDto {
 
+    private Long id;
+
     @Builder.Default
     @Min(value = 1, message = "Number of fish must be at least 1")
     private int numberOfFish = 1;
@@ -29,4 +31,9 @@ public class HuntingDto {
     @NotBlank(message = "Fish name is required")
     private String fishName;
 
+    private MemberDto member;
+
+    @NotNull(message = "Weight is required")
+    @Min(value = 0, message = "Weight must be positive")
+    private Double weight;
 }

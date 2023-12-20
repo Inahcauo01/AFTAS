@@ -11,6 +11,13 @@ public class RankingDtoMapper {
                 .id(ranking.getId())
                 .memberId(ranking.getMember().getId())
                 .competitionId(ranking.getCompetition().getId())
+                .score(ranking.getScore())
+                .member(
+                        MemberDtoMapper.toDto(ranking.getMember())
+                )
+                .competition(
+                        CompetitionDtoMapper.toDto(ranking.getCompetition())
+                )
                 .rank(ranking.getRank())
                 .build();
     }
@@ -19,6 +26,7 @@ public class RankingDtoMapper {
         return Ranking.builder()
                 .id(rankingDto.getId())
                 .rank(rankingDto.getRank())
+                .score(rankingDto.getScore())
                 .member(
                         Member.builder()
                                 .id(rankingDto.getMemberId())

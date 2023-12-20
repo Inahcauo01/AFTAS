@@ -59,4 +59,15 @@ public class HuntingController {
         response.setMessage("Hunting retrieved successfully");
         return ResponseEntity.ok().body(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response<HuntingDto>> deleteHuntingById(Long id) throws ValidationException {
+        Response<HuntingDto> response = new Response<>();
+        Hunting hunting = huntingService.getHuntingById(id)
+                .orElseThrow(() -> new ValidationException(new CustomError("hunting", "hunting not found")));
+        huntingService.deleteHuntingById(id);
+        response.setResult(HuntingDtoMapper.toDto(hunting));
+        response.setMessage("Hunting deleted successfully");
+        return ResponseEntity.ok().body(response);
+    }
 }

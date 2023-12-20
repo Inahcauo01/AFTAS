@@ -18,4 +18,5 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
 
     List<Ranking> findByCompetition_IdOrderByRankAsc(Long id);
 
+    Number countByCompetition(Competition competition);
 }

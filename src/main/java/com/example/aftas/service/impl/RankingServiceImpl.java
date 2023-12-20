@@ -50,11 +50,15 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public List<Ranking> getRankingByCompetitionCode(String code) throws ValidationException {
+        if (rankingRepository.findByCompetition_Code(code).isEmpty())
+            throw new ValidationException(new CustomError("code", "Ranking with competition code " + code + " not found"));
         return rankingRepository.findByCompetition_Code(code);
     }
 
     @Override
     public List<Ranking> getRankingByCompetitionId(Long id) throws ValidationException {
+        if (rankingRepository.findByCompetition_IdOrderByRankAsc(id).isEmpty())
+            throw new ValidationException(new CustomError("id", "Ranking with competition id " + id + " not found"));
         return rankingRepository.findByCompetition_IdOrderByRankAsc(id);
     }
 

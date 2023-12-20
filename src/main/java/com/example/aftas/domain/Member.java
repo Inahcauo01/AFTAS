@@ -1,6 +1,8 @@
 package com.example.aftas.domain;
 
 import com.example.aftas.domain.enums.IdentityDocumentType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,4 +33,11 @@ public class Member {
     private IdentityDocumentType identityDocument;
     private String identityNumber;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Ranking> rankings;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Hunting> huntings;
 }

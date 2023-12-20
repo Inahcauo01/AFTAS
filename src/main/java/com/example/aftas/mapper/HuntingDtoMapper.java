@@ -10,10 +10,13 @@ public class HuntingDtoMapper {
 
     public static HuntingDto toDto(Hunting hunting) {
         return HuntingDto.builder()
+                .id(hunting.getId())
                 .numberOfFish(hunting.getNumberOfFish())
                 .competitionCode(hunting.getCompetition().getCode())
                 .memberNum(hunting.getMember().getNum())
                 .fishName(hunting.getFish().getName())
+                .member(MemberDtoMapper.toDto(hunting.getMember()))
+                .weight(hunting.getWeight())
                 .build();
     }
 
@@ -23,6 +26,7 @@ public class HuntingDtoMapper {
                 .member(Member.builder().num(huntingDto.getMemberNum()).build())
                 .competition(Competition.builder().code(huntingDto.getCompetitionCode()).build())
                 .fish(Fish.builder().name(huntingDto.getFishName()).build())
+                .weight(huntingDto.getWeight())
                 .build();
     }
 }

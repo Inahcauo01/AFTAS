@@ -34,16 +34,17 @@ public class HuntingServiceImpl implements HuntingService {
         validateHunting(hunting);
         Hunting savedHunting;
 
-        if (huntingRepository.existsByMemberAndCompetitionAndFish(hunting.getMember(), hunting.getCompetition(), hunting.getFish())) {
-            Hunting hunting1 = huntingRepository.findByMemberAndCompetitionAndFish(hunting.getMember(), hunting.getCompetition(), hunting.getFish());
-            hunting1.setNumberOfFish(hunting1.getNumberOfFish() + 1);
-            savedHunting = huntingRepository.save(hunting1);
+        Hunting huntingExisted = huntingRepository.findByMemberAndCompetitionAndFish(hunting.getMember(), hunting.getCompetition(), hunting.getFish());
+        Optional<Ranking> rankingOptional = rankingService.getRankingByMemberAndCompetition(hunting.getMember(), hunting.getCompetition());
+        Integer points = hunting.getFish().getLevel().getPoints();
+
+        if (huntingExisted != null) {
+            huntingExisted.setNumberOfFish(huntingExisted.getNumberOfFish() + hunting.getNumberOfFish());
+            savedHunting = huntingRepository.save(huntingExisted);
         }else {
             savedHunting = huntingRepository.save(hunting);
         }
 
-        Optional<Ranking> rankingOptional = rankingService.getRankingByMemberAndCompetition(hunting.getMember(), hunting.getCompetition());
-        Integer points = hunting.getFish().getLevel().getPoints();
 
         if (rankingOptional.isPresent()) {
             Ranking ranking = rankingOptional.get();
@@ -67,6 +68,11 @@ public class HuntingServiceImpl implements HuntingService {
         Optional<Member> optionalMember = memberService.findByNum(hunting.getMember().getNum());
         Optional<Fish> optionalFish = fishService.findByName(hunting.getFish().getName());
         LocalDateTime now = LocalDateTime.now();
+
+        // check if weight is less than average weight
+        if (hunting.getWeight() < optionalFish.get().getAverageWeight())
+            throw new ValidationException(new CustomError("weight", "weight cannot be less than average weight : " + optionalFish.get().getAverageWeight()));
+
 
         if (optionalMember.isEmpty())
             throw new ValidationException(new CustomError("member", "member not found"));

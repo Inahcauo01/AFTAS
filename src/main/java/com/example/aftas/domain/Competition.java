@@ -1,5 +1,6 @@
 package com.example.aftas.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,13 @@ public class Competition {
     private String code;
     private LocalDate date;
     private LocalTime startTime;
-    private LocalTime endTime;
+
+    @JsonFormat(pattern = "HH:mm")
+    @Builder.Default
+    private LocalTime endTime = LocalTime.parse("23:59");
+
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
 
-//    @OneToMany(mappedBy = "competition")
-//    private List<Ranking> rankings;
 }

@@ -32,6 +32,9 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition save(Competition competition) throws ValidationException {
+        if (competition.getLocation() == null)
+            throw new ValidationException(new CustomError("location", "Location must not be null"));
+
         competition.setCode(competition.getLocation().substring(0, 3).toLowerCase() + "-" + competition.getDate().format(DateTimeFormatter.ofPattern("yy-MM-dd")));
         validateCompetition(competition);
         return competitionRepository.save(competition);
@@ -62,6 +65,14 @@ public class CompetitionServiceImpl implements CompetitionService {
         // check if member is already exists in the competition
         if (!rankingRepository.findByMemberAndCompetition(member, competition).isEmpty())
             throw new ValidationException(new CustomError("member", "Member is already exists in the competition"));
+
+        //check if competition is already started
+        if (competition.getDate().isBefore(LocalDate.now()))
+            throw new ValidationException(new CustomError("competition", "Competition is already started"));
+
+        //check if competition is full
+        if (competition.getNumberOfParticipants() < rankingRepository.countByCompetition(competition).intValue())
+            throw new ValidationException(new CustomError("competition", "Competition is full"));
     }
 
 
@@ -71,8 +82,20 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ValidationException {
+        if (!memberRepository.existsById(id))
+            throw new ValidationException(new CustomError("member", "Member not found"));
 
+        // Explicitly delete associated rankings
+        memberRepository.findById(id).ifPresent(member -> {
+            List<Ranking> rankings = member.getRankings();
+            if (rankings != null && !rankings.isEmpty()) {
+                rankingRepository.deleteAll(rankings);
+            }
+        });
+
+        // Now, delete the member
+        memberRepository.deleteById(id);
     }
 
     @Override
@@ -81,6 +104,10 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     private void validateCompetition(Competition competition) throws ValidationException {
+        // check if location is empty
+        if (competition.getLocation().isEmpty())
+            throw new ValidationException(new CustomError("location", "Location is required"));
+
         // check if competition code is already exists
         if (competitionRepository.findByCode(competition.getCode()).isPresent())
             throw new ValidationException(new CustomError("competition code", "Competition code is already exists"));
@@ -97,6 +124,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (competition.getStartTime().isAfter(competition.getEndTime().minusHours(4)))
             throw new ValidationException(new CustomError("competition time", "Competition start time must be at least 4 hours before the end time"));
 
+        // check if start time is after end time
+        if (competition.getStartTime().isAfter(competition.getEndTime()))
+            throw new ValidationException(new CustomError("competition time", "Competition start time must be before the end time"));
     }
 
     public boolean existsByCode(String code) {

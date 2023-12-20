@@ -16,7 +16,7 @@ public interface CompetitionService {
     public List<Competition> getAllCompetitions();
     public Competition save(Competition competition) throws ValidationException;
     public Competition update(Competition competition);
-    public void delete(Long id);
+    public void delete(Long id) throws ValidationException;
     public Competition getCompetitionById(Long id);
 
     public Ranking addMemberToCompetition(Long competitionId, Long memberId) throws ValidationException;

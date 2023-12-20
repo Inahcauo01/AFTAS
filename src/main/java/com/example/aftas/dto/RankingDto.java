@@ -29,4 +29,7 @@ public class RankingDto {
     @NotNull(message = "Competition id is required")
     @Min(value = 1, message = "Competition id must be a positive number")
     private Long competitionId;
+
+    private MemberDto member;
+    private CompetitionDto competition;
 }
