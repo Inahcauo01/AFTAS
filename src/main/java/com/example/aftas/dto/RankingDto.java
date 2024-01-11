@@ -1,5 +1,7 @@
 package com.example.aftas.dto;
 
+import com.example.aftas.domain.Competition;
+import com.example.aftas.domain.Member;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RankingDto {
-    private Long id;
 
     @Builder.Default
     @Min(value = 0, message = "Rank must be a positive number")
@@ -24,12 +25,10 @@ public class RankingDto {
 
     @NotNull(message = "Member id is required")
     @Min(value = 1, message = "Member id must be a positive number")
-    private Long memberId;
+    private Member member;
 
     @NotNull(message = "Competition id is required")
     @Min(value = 1, message = "Competition id must be a positive number")
-    private Long competitionId;
+    private Competition competition;
 
-    private MemberDto member;
-    private CompetitionDto competition;
 }

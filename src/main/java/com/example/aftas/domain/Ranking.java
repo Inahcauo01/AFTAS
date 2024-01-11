@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 @Entity
 @Data
@@ -13,9 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Ranking {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private RankingKey id;
 
     @Builder.Default
     private Integer rank = 0;
@@ -23,12 +23,12 @@ public class Ranking {
     private Integer score = 0;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", insertable = false, updatable = false)
     @JsonBackReference
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "competition_id")
+    @JoinColumn(name = "competition_id", insertable = false, updatable = false)
     private Competition competition;
 
 }

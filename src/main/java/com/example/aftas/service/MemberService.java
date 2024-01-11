@@ -4,6 +4,7 @@ import com.example.aftas.domain.Member;
 import com.example.aftas.utils.ValidationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,4 +22,6 @@ public interface MemberService {
     boolean existsByNumber(Integer num);
 
     Optional<Member> findByNum(Integer num);
+
+    List<Member> getAllMembers(Integer pageNo, Integer pageSize);
 }
