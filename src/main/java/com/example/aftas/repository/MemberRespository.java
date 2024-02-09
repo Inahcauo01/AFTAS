@@ -24,4 +24,6 @@ public interface MemberRespository extends JpaRepository<Member, Long> {
     List<Member> findByNumOrNameOrFamilyName(@Param("searchTerm") String searchTerm);
 
     boolean existsByNum(Integer num);
+
+    Optional<Member> findByUsername(String username);
 }
