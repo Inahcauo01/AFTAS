@@ -40,6 +40,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 43200000)) // set expiration to 12 hours
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claim("roles", userDetails.getAuthorities())
                 .compact();
     }
 
@@ -68,5 +69,9 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String extractUserName(String jwt) {
+        return extractClaim(jwt, Claims::getSubject);
     }
 }

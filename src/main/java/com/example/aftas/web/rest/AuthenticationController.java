@@ -1,6 +1,9 @@
-package com.example.aftas.auth;
+package com.example.aftas.web.rest;
 
 
+import com.example.aftas.auth.AuthenticationResponse;
+import com.example.aftas.auth.LoginRequest;
+import com.example.aftas.auth.RegisterRequest;
 import com.example.aftas.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

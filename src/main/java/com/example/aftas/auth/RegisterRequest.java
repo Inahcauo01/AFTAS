@@ -26,17 +26,4 @@ public class RegisterRequest {
     private String password;
     private Set<String> roles;
 
-    // I want a Json
-// {
-//     "num": 1,
-//     "name": "John",
-//     "familyName": "Doe",
-//     "national
-//     "identityDocument": "Passport",
-//     "identityNumber": "123456789",
-//     "accessionDate": "2021-01-01",
-//     "username": "john.doe",
-//     "password": "password",
-//     "roles": ["ROLE_USER"]
-// }
 }

@@ -41,7 +41,11 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .enabled(true)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
                 .build();
+
 
         // Set the saved roles to the user
         user.setAuthorities(getOrCreateRoles(request.getRoles()));

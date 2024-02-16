@@ -40,6 +40,9 @@ public class Member implements UserDetails {
     private String username;
     private String password;
     private boolean enabled = true;
+    private boolean accountNonExpired = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> authorities;
@@ -70,28 +73,32 @@ public class Member implements UserDetails {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     public boolean hasRole(String role) {
         return getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals(role));
     }
+
 }
