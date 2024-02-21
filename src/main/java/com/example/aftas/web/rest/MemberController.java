@@ -28,6 +28,11 @@ public class MemberController {
         Response<List<MemberDto>> response = new Response<>();
         List<MemberDto> memberList = new ArrayList<>();
         memberService.getAllMembers().stream().map(MemberDtoMapper::toDto).forEach(memberList::add);
+        if (memberList.isEmpty()) {
+            response.setMessage("There are no members in the database");
+        } else {
+            response.setMessage("Member list retrieved successfully");
+        }
         response.setResult(memberList);
         return ResponseEntity.ok().body(response);
     }
