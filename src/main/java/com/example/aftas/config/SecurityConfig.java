@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**", "/v3/api-docs.yaml", "/api/v1/role/seed").permitAll()
                                 .requestMatchers("/v3/**").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())

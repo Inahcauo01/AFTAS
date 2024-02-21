@@ -47,9 +47,16 @@ public class AuthenticationService {
                 .build();
 
 
-        // Set the saved roles to the user
-        user.setAuthorities(getOrCreateRoles(request.getRoles()));
-
+        // If the user has no roles, set the default role to the user
+        if (request.getRoles() == null || request.getRoles().isEmpty()) {
+            user.setAuthorities(Set.of(getOrCreateRole("ROLE_USER")));
+        }
+        else{
+            if (request.getRoles().contains("ROLE_USER"))
+                user.setEnabled(false);
+            // Set the saved roles to the user
+            user.setAuthorities(getOrCreateRoles(request.getRoles()));
+        }
 
         memberRespository.save(user);
         // generate & return a token for the user
