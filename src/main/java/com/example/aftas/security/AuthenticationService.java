@@ -48,14 +48,13 @@ public class AuthenticationService {
 
 
         // If the user has no roles, set the default role to the user
-        if (request.getRoles() == null || request.getRoles().isEmpty()) {
+        Set<String> roles = request.getRoles();
+        if (roles == null || roles.isEmpty() || roles.contains("ROLE_USER")) {
             user.setAuthorities(Set.of(getOrCreateRole("ROLE_USER")));
-        }
-        else{
-            if (request.getRoles().contains("ROLE_USER"))
-                user.setEnabled(false);
-            // Set the saved roles to the user
-            user.setAuthorities(getOrCreateRoles(request.getRoles()));
+            user.setEnabled(false);
+        } else {
+            user.setEnabled(true);
+            user.setAuthorities(getOrCreateRoles(roles));
         }
 
         memberRespository.save(user);
