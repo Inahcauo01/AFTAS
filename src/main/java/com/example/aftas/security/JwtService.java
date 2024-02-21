@@ -38,9 +38,19 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 43200000)) // set expiration to 12 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 300000)) // set expiration to 5 minutes
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .claim("roles", userDetails.getAuthorities())
+                .compact();
+    }
+
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 604800000)) // set expiration to 7 days
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 

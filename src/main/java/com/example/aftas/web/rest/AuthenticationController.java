@@ -1,6 +1,7 @@
 package com.example.aftas.web.rest;
 
 
+import com.example.aftas.auth.AuthenticationRequest;
 import com.example.aftas.auth.AuthenticationResponse;
 import com.example.aftas.auth.LoginRequest;
 import com.example.aftas.auth.RegisterRequest;
@@ -27,6 +28,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody AuthenticationRequest request){
+        return ResponseEntity.ok(authenticationService.refreshToken(request.getRefreshToken()));
     }
 
 }

@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class AuthenticationResponse {
-    private String token;
+public class AuthenticationRequest {
     private String refreshToken;
+
 }
